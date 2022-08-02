@@ -32,9 +32,9 @@ const server = app.listen(process.env.PORT, () => {
 })
 
 const io = socket(server, {
-  allowRequest: (req, callback) => {
-    const noOriginHeader = req.headers.origin === undefined
-    callback(null, noOriginHeader)
+  cors: {
+    origin: 'http://localhost:3000',
+    credentials: true,
   },
 })
 
