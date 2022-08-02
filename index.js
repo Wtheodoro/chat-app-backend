@@ -34,7 +34,7 @@ const server = app.listen(process.env.PORT, () => {
 const io = socket(server, {
   cors: {
     origin: 'http://localhost:3000',
-    credential: true,
+    credentials: true,
   },
 })
 
@@ -42,13 +42,16 @@ global.onlineUsers = new Map()
 
 io.on('connection', (socket) => {
   global.chatSocket = socket
-  socket.on('add-users', (userId) => {
+
+  socket.on('add-user', (userId) => {
+    console.log('userLogged', userId)
     onlineUsers.set(userId, socket.id)
   })
 
   socket.on('send-msg', (data) => {
     const sendUserSocket = onlineUsers.get(data.to)
 
+    // if the user is online
     if (sendUserSocket) {
       socket.to(sendUserSocket).emit('msg-recieve', data.message)
     }
